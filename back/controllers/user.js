@@ -10,9 +10,17 @@ exports.signup = (req, res, next) => {
                 email: req.body.email,
                 password: hash
             });
-            user.save()
-                .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
-                .catch(error => res.status(400).json({ error }));
+            console.log(user.email)
+            const validRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+            console.log(validRegex.test(user.email)) 
+                if (!validRegex.test(user.email)) {
+                    res.status(400).json({ message: 'format invalid' });
+                } else {
+                    user.save()
+                    .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
+                    .catch(error => res.status(400).json({ error }));
+                }
+           
         })
         .catch(error => res.status(500).json({ error }));
 };
